@@ -3,32 +3,42 @@ const { TicketControl } = require("./classes/ticket-control");
 const ticketControl = new TicketControl();
 
 io.on("connection", client => {
-  console.log("Usuario conectado");
 
-  client.emit("enviarMensaje", {
-    usuario: "Administrador",
-    mensaje: "Bienvenido a esta aplicación"
+  client.on("siguienteTicket", () => {
+    let siguiente = ticketControl.  siguienteTiket();
+    console.log("Siguiente: ", siguiente);
   });
 
-  client.on("disconnect", () => {
-    console.log("Usuario desconectado");
-  });
+  // client.on("siguienteTicket", () => {
+  //   console.log("cual es el siguiente tiket");
+  // });
 
-  // Escuchar el cliente
-  client.on("enviarMensaje", (data, callback) => {
-    console.log(data);
+  // console.log("Usuario conectado");
 
-    client.broadcast.emit("enviarMensaje", data);
+  // client.emit("enviarMensaje", {
+  //   usuario: "Administrador",
+  //   mensaje: "Bienvenido a esta aplicación"
+  // });
 
-    // if (mensaje.usuario) {
-    //     callback({
-    //         resp: 'TODO SALIO BIEN!'
-    //     });
+  // client.on("disconnect", () => {
+  //   console.log("Usuario desconectado");
+  // });
 
-    // } else {
-    //     callback({
-    //         resp: 'TODO SALIO MAL!!!!!!!!'
-    //     });
-    // }
-  });
+  // // Escuchar el cliente
+  // client.on("enviarMensaje", (data, callback) => {
+  //   console.log(data);
+
+  //   client.broadcast.emit("enviarMensaje", data);
+
+  // if (mensaje.usuario) {
+  //     callback({
+  //         resp: 'TODO SALIO BIEN!'
+  //     });
+
+  // } else {
+  //     callback({
+  //         resp: 'TODO SALIO MAL!!!!!!!!'
+  //     });
+  // }
+  //});
 });

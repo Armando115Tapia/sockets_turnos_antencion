@@ -10,5 +10,6 @@ socket.on("disconnect", function() {
 });
 
 $("button").on("click", function() {
-  console.log("click");
+  // console.log("click");
+  socket.emit("siguienteTicket");
 });
