@@ -3,10 +3,34 @@ const { TicketControl } = require("./classes/ticket-control");
 const ticketControl = new TicketControl();
 
 io.on("connection", client => {
-
-  client.on("siguienteTicket", () => {
-    let siguiente = ticketControl.  siguienteTiket();
+  client.on("siguienteTicket", (data, callback) => {
+    let siguiente = ticketControl.siguienteTiket();
     console.log("Siguiente: ", siguiente);
+    callback(siguiente);
+  });
+
+  // Emitir el estado actual
+  client.emit("estadoActual", {
+    actual: ticketControl.getUtlimoTicket(),
+    ultimos4: ticketControl.getUltimos4()
+  });
+
+  // Escucha el evento antender ticket
+  client.on("atenderTicket", (data, callback) => {
+    if (!data.escritorio) {
+      return callback({
+        err: true,
+        mensaje: "El escritorio es necesario"
+      });
+    }
+    let atenderTicket = ticketControl.atenderticket(data.escritorio);
+    callback(atenderTicket);
+
+    // Actualizar la pantalla que todo el mundo esta viendo.
+    // emitir ultimos4
+    client.broadcast.emit("ultimos4", {
+      ultimos4: ticketControl.getUltimos4()
+    });
   });
 
   // client.on("siguienteTicket", () => {
